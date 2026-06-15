@@ -395,63 +395,65 @@ a:hover {
   transition: var(--transition-normal);
 }
 
-/* Slide Mode */
-.viewport-container.slide-mode {
-  margin-left: 250px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 130px);
-  padding: 30px;
-  background-color: var(--color-bg-darker);
-}
+@media screen {
+  /* Slide Mode */
+  .viewport-container.slide-mode {
+    margin-left: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 130px);
+    padding: 30px;
+    background-color: var(--color-bg-darker);
+  }
 
-.viewport-container.slide-mode .brochure-page {
-  display: none;
-  width: 100%;
-  max-width: 1100px;
-  height: 700px;
-  background-color: var(--color-bg-card);
-  border-radius: 16px;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
-  animation: slideIn var(--transition-normal);
-}
+  .viewport-container.slide-mode .brochure-page {
+    display: none;
+    width: 100%;
+    max-width: 1100px;
+    height: 700px;
+    background-color: var(--color-bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    animation: slideIn var(--transition-normal);
+  }
 
-.viewport-container.slide-mode .brochure-page.active-page {
-  display: block;
-}
+  .viewport-container.slide-mode .brochure-page.active-page {
+    display: block;
+  }
 
-/* A4 Print View Mode */
-.viewport-container.print-view-mode {
-  margin-left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  padding: 40px 20px;
-  background-color: #0f1624;
-}
+  /* A4 Print View Mode */
+  .viewport-container.print-view-mode {
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 20px;
+    background-color: #0f1624;
+  }
 
-.viewport-container.print-view-mode .brochure-page {
-  display: block;
-  width: 210mm;
-  height: 297mm;
-  background-color: var(--color-bg-card);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  border: 1px solid var(--color-border);
-  position: relative;
-  overflow: hidden;
-}
+  .viewport-container.print-view-mode .brochure-page {
+    display: block;
+    width: 297mm;
+    height: 210mm;
+    background-color: var(--color-bg-card);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
 
-/* Hide sidebar and footer in A4 view */
-body.hide-sidebar-controls .sidebar-nav {
-  transform: translateX(-250px);
-}
-body.hide-sidebar-controls .viewport-container.slide-mode {
-  margin-left: 0;
+  /* Hide sidebar and footer in A4 view */
+  body.hide-sidebar-controls .sidebar-nav {
+    transform: translateX(-250px);
+  }
+  body.hide-sidebar-controls .viewport-container.slide-mode {
+    margin-left: 0;
+  }
 }
 
 /* ==========================================
@@ -1446,11 +1448,16 @@ td strong {
     display: none !important;
   }
   
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
   body, html {
-    background-color: #000000 !important;
+    background-color: #030712 !important;
     color: #ffffff !important;
-    width: 210mm !important;
-    height: 297mm !important;
+    width: 297mm !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
@@ -1459,15 +1466,17 @@ td strong {
   .viewport-container {
     margin: 0 !important;
     padding: 0 !important;
-    background-color: #000000 !important;
+    background-color: #030712 !important;
     display: block !important;
+    width: 297mm !important;
+    height: auto !important;
   }
   
   /* Reset page styling for exact print boundaries */
   .brochure-page {
     display: block !important;
-    width: 210mm !important;
-    height: 297mm !important;
+    width: 297mm !important;
+    height: 210mm !important;
     page-break-after: always !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
@@ -1477,6 +1486,7 @@ td strong {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     position: relative !important;
+    overflow: hidden !important;
   }
 
   /* Force display of slide content for Page 5 (Rishi) */
@@ -2539,38 +2549,4 @@ document.addEventListener('DOMContentLoaded', () => {
       elem.setAttribute('contenteditable', isEditingEnabled ? 'true' : 'false');
     });
     
-    if (isEditingEnabled) {
-      btnEdit.classList.add('active');
-      btnEdit.querySelector('span').textContent = 'Disable Editing';
-    } else {
-      btnEdit.classList.remove('active');
-      btnEdit.querySelector('span').textContent = 'Enable Editing';
-    }
-  });
-
-  // ==========================================
-  // PDF EXPORT
-  // ==========================================
-  
-  btnPdf.addEventListener('click', () => {
-    // Cache current mode
-    const prevMode = viewMode;
-    
-    // Switch to print view for clean rendering layout before print triggers
-    setViewMode('print-view');
-    
-    // Slight timeout to let layout calculations stabilize before print dialog pops
-    setTimeout(() => {
-      window.print();
-      
-      // Restore previous mode
-      setTimeout(() => {
-        setViewMode(prevMode);
-      }, 500);
-    }, 250);
-  });
-  
-});
-</script>
-</body>
-</html>
+    if (
